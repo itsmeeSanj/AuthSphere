@@ -1,11 +1,16 @@
 import mongoose from "mongoose";
 
 const connectDB = async function () {
-  mongoose.connection.on("connected", function () {
-    console.log("database connected");
-  });
+  try {
+    const conn = await mongoose.connect(
+      `${process.env.MONGODB_URI}/AuthSphere`,
+    );
 
-  await mongoose.connect(`${process.env.MONGODB_URI}/AuthSphere`);
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error("Database connection failed:", error.message);
+    process.exit(1);
+  }
 };
 
 export default connectDB;
