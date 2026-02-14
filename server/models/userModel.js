@@ -11,3 +11,7 @@ const userSchema = new mongoose.Schema({
   resetOtp: { type: String, default: "" }, // default will be unverified
   resetOtpExpireAT: { type: Number, default: 0 },
 });
+
+const userModel = mongoose.models.user || mongoose.model("user", userSchema);
+
+export default userModel;
