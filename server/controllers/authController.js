@@ -53,3 +53,28 @@ export async function register(req, res) {
     });
   }
 }
+
+// login
+export async function login(req, res) {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.json({
+      success: false,
+      message: "Email and Password are required",
+    });
+  }
+
+  try {
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res.json({
+        success: false,
+        message: "Invalid Email",
+      });
+    }
+
+    const isMatch;
+  } catch (error) {}
+}
