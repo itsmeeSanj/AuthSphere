@@ -22,6 +22,16 @@ export async function register(req, res) {
         success: false,
         message: "User already exisit",
       });
+
+    //   encrypt Password
+    const hashedPassword = await bcrypt.hash(password, 10); // encrypt password
+
+    const user = new userModel({
+      name,
+      email,
+      password: hashedPassword,
+    });
+    await user.save();
   } catch (error) {
     res.json({
       success: false,
