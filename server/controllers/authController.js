@@ -42,13 +42,14 @@ export async function register(req, res) {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.evn.NODE_ENV === "production", // localenv: http / live : https
+      secure: process.env.NODE_ENV === "production", // localenv: http / live : https
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict", // to run both client and server with same domain
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     return res.json({
       success: true,
+      message: "user registered sucessfully",
     });
   } catch (error) {
     res.json({
@@ -94,7 +95,7 @@ export async function login(req, res) {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.evn.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -114,7 +115,7 @@ export async function logout(req, res) {
   try {
     res.clearCookie("token", {
       httpOnly: true,
-      secure: process.evn.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
     });
 
