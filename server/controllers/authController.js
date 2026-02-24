@@ -36,7 +36,7 @@ export async function register(req, res) {
     await user.save();
 
     // generate token
-    const token = jwt.sign({ id: user_id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     }); // user create 1 id for token, env variable, expiry time, add cookie in response
 
@@ -45,6 +45,10 @@ export async function register(req, res) {
       secure: process.evn.NODE_ENV === "production", // localenv: http / live : https
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict", // to run both client and server with same domain
       maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.json({
+      success: true,
     });
   } catch (error) {
     res.json({
@@ -75,6 +79,54 @@ export async function login(req, res) {
       });
     }
 
-    // const isMatch;
-  } catch (error) {}
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.json({
+        success: false,
+        message: "Invalid password",
+      });
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.evn.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.json({
+      success: true,
+    });
+  } catch (error) {
+    return res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
+export async function logout(req, res) {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.evn.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+    });
+
+    return res.json({
+      success: true,
+      message: "Log out",
+    });
+  } catch (error) {
+    return res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+  y;
 }
