@@ -2,7 +2,9 @@
 
 import bcrypt from "bcryptjs"; //encrypt the password
 import jwt from "jsonwebtoken"; //generate token for authentication
+
 import userModel from "../models/userModel.js";
+import nodemailer from "../utils/nodemailer.js";
 
 export async function register(req, res) {
   const { name, email, password } = req.body;
@@ -45,6 +47,15 @@ export async function register(req, res) {
       secure: process.env.NODE_ENV === "production", // localenv: http / live : https
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict", // to run both client and server with same domain
       maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    // Send an email using async/await
+    await nodemailer.sendMail({
+      from: process.env.SENDER_EMAIL,
+      to: email,
+      subject: "Welcome to authSphere",
+      text: `Welcome to the AUthSPhere. your account has been created by email ID :${email}`, // Plain-text version of the message
+      html: "<b>Hello world?</b>", // HTML version of the message
     });
 
     return res.json({
@@ -102,6 +113,7 @@ export async function login(req, res) {
 
     return res.json({
       success: true,
+      message: "User logged In",
     });
   } catch (error) {
     return res.json({
