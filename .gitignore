@@ -1,0 +1,38 @@
+# Environment files
+.env
+.env.*
+**/.env
+**/.env.*
+
+
+# Node modules
+node_modules
+**/node_modules
+
+# Build folders
+dist
+build
+**/dist
+**/build
+
+# Logs
+logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
