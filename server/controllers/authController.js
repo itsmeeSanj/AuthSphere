@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs"; //encrypt the password
 import jwt from "jsonwebtoken"; //generate token for authentication
 
 import userModel from "../models/userModel.js";
-import nodemailer from "../utils/nodemailer.js";
+import transporter from "../utils/nodemailer.js";
 
 export async function register(req, res) {
   const { name, email, password } = req.body;
@@ -50,12 +50,17 @@ export async function register(req, res) {
     });
 
     // Send an email using async/await
-    await nodemailer.sendMail({
+    await transporter.sendMail({
       from: process.env.SENDER_EMAIL,
       to: email,
       subject: "Welcome to authSphere",
       text: `Welcome to the AUthSPhere. your account has been created by email ID :${email}`, // Plain-text version of the message
-      html: "<b>Hello world?</b>", // HTML version of the message
+      html: `<h2>Welcome to AuthSphere</h2>
+            <br/>
+            <p>Hello ${name},</p>
+            <p>Thank you for registering with AuthSphere.</p>
+            <p>If you did not create this account, please ignore this email.</p>
+            <p>Best regards,<br/>AuthSphere Team</p>`, // HTML version of the message
     });
 
     return res.json({
