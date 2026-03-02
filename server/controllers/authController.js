@@ -190,3 +190,55 @@ export async function sendVerifyOTP(req, res) {
     });
   }
 }
+
+// Email verification
+export async function verifyEmail(req, res) {
+  const { userId, OTP } = req.body;
+
+  if (!userId || !OTP) {
+    return res.json({
+      success: false,
+      message: `Missing Details`,
+    });
+  }
+
+  try {
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.json({
+        success: false,
+        message: `User not found`,
+      });
+    }
+
+    if ((user.verifyOtp === "") | (user.verifyOtp !== otp)) {
+      return res.json({
+        success: false,
+        message: `Invalid OTP`,
+      });
+    }
+
+    if (user.verifyOtpExpireAT < Date.now()) {
+      return res.json({
+        success: false,
+        message: `OTP Expired`,
+      });
+    }
+
+    user.isAccountVerified = true;
+    user.verifyOtp = "";
+    user.verifyOtpExpireAT = 0;
+
+    await user.save();
+    return user.json({
+      success: true,
+      message: "Email verified Sucessfully",
+    });
+  } catch (error) {
+    return res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
