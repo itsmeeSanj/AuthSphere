@@ -128,6 +128,7 @@ export async function login(req, res) {
   }
 }
 
+// logout
 export async function logout(req, res) {
   try {
     res.clearCookie("token", {
@@ -147,4 +148,45 @@ export async function logout(req, res) {
     });
   }
   y;
+}
+
+// sendverifyotp
+export async function sendVerifyOTP(req, res) {
+  try {
+    const { userId } = req.body;
+    const user = await userModel.findById(userId);
+
+    if (user.isAccountVerified) {
+      return res.json({
+        success: false,
+        message: "Account already varified",
+      });
+    }
+
+    const OTP = String(Math.floor(100000 + Math.random() * 900000));
+    user.verifyOtp = OTP;
+    user.verifyOtpExpireAT = Date.now() + 24 * 60 * 60 * 1000;
+
+    await user.save();
+
+    // send email
+    const mailOption = {
+      from: process.env.SENDER_EMAIL,
+      to: user.email,
+      subject: "Account verfication OTP",
+      text: `Your OTP is ${OTP}. verify your account using this OTP`, // Plain-text version of the message
+    };
+
+    await transporter.sendMail(mailOption);
+
+    res.json({
+      success: true,
+      message: "Verification OTP sent on email",
+    });
+  } catch (error) {
+    res.json({
+      success: true,
+      message: re,
+    });
+  }
 }
