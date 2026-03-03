@@ -29,7 +29,6 @@ export async function register(req, res) {
 
     //   encrypt Password
     const hashedPassword = await bcrypt.hash(password, 10); // encrypt password
-
     const user = new userModel({
       name,
       email,
@@ -63,7 +62,7 @@ export async function register(req, res) {
             <p>Best regards,<br/>AuthSphere Team</p>`, // HTML version of the message
     });
 
-    return res.json({
+    res.json({
       success: true,
       message: "user registered sucessfully",
     });
