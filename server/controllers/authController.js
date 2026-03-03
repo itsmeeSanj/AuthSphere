@@ -165,7 +165,7 @@ export async function sendVerifyOTP(req, res) {
 
     const OTP = String(Math.floor(100000 + Math.random() * 900000));
     user.verifyOtp = OTP;
-    user.verifyOtpExpireAT = Date.now() + 24 * 60 * 60 * 1000;
+    user.verifyOtpExpireAT = Date.now() + 10 * 60 * 1000;
 
     await user.save();
 
@@ -185,17 +185,17 @@ export async function sendVerifyOTP(req, res) {
     });
   } catch (error) {
     res.json({
-      success: true,
-      message: re,
+      success: false,
+      message: error.message,
     });
   }
 }
 
 // Email verification
 export async function verifyEmail(req, res) {
-  const { userId, OTP } = req.body;
+  const { userId, otp } = req.body;
 
-  if (!userId || !OTP) {
+  if (!userId || !otp) {
     return res.json({
       success: false,
       message: `Missing Details`,
@@ -212,7 +212,7 @@ export async function verifyEmail(req, res) {
       });
     }
 
-    if ((user.verifyOtp === "") | (user.verifyOtp !== otp)) {
+    if (user.verifyOtp === "" || user.verifyOtp !== otp) {
       return res.json({
         success: false,
         message: `Invalid OTP`,
@@ -231,7 +231,8 @@ export async function verifyEmail(req, res) {
     user.verifyOtpExpireAT = 0;
 
     await user.save();
-    return user.json({
+
+    res.json({
       success: true,
       message: "Email verified Sucessfully",
     });
