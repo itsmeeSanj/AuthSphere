@@ -14,7 +14,7 @@ connectDB();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookiePraser());
-app.use(cors({ credentials: true })); //send cookies into res
+app.use(cors({ origin: process.env.CLIENT_URL, credentials: true })); //send cookies into res
 
 // API ENDPOINTS
 app.get("/", function (req, res) {
