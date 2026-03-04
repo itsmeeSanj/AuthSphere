@@ -5,31 +5,26 @@
 import jwt from "jsonwebtoken";
 
 export async function userAuth(req, res, next) {
-  const { token } = req.cookies;
+  const { token } = req.cookies?.token; //optional chaining
 
   if (!token) {
-    res.json({
-      success: false,
-      Message: "Not authorized login again",
-    });
+    return res.status(401).json({ success: false, message: "Not authorized" });
   }
 
   try {
-    const tokenDecoded = jwt.verify(token, process.env.JWT_SECRET);
-    if (tokenDecoded.id) {
-      req.body.userId = tokenDecoded.id;
-    } else {
-      return res.json({
-        success: false,
-        Message: "Not authorized login again",
-      });
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!decoded?.id) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Not authorized" });
     }
 
-    next();
-  } catch (error) {
-    req.json({
-      success: false,
-      message: error.message,
-    });
+    req.userId = decoded.id;
+    return next();
+  } catch (err) {
+    return res
+      .status(401)
+      .json({ success: false, message: "Invalid/Expired token" });
   }
 }
