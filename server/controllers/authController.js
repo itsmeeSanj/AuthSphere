@@ -49,7 +49,7 @@ export async function register(req, res) {
     });
 
     // Send an email using async/await
-    await transporter.sendMail({
+    const info = await transporter.sendMail({
       from: process.env.SENDER_EMAIL,
       to: email,
       subject: "Welcome to authSphere",
@@ -62,9 +62,12 @@ export async function register(req, res) {
             <p>Best regards,<br/>AuthSphere Team</p>`, // HTML version of the message
     });
 
+    console.log("MAIL SENT:", info.messageId, info.response);
+
     res.json({
       success: true,
       message: "user registered sucessfully",
+      emailQueued: true,
     });
   } catch (error) {
     res.json({
