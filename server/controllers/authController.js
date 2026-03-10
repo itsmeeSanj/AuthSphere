@@ -49,7 +49,7 @@ export async function register(req, res) {
     });
 
     // Send an email using async/await
-    const info = await transporter.sendMail({
+    const info = {
       from: process.env.SENDER_EMAIL,
       to: email,
       subject: "Welcome to authSphere",
@@ -60,11 +60,11 @@ export async function register(req, res) {
             <p>Thank you for registering with AuthSphere.</p>
             <p>If you did not create this account, please ignore this email.</p>
             <p>Best regards,<br/>AuthSphere Team</p>`, // HTML version of the message
-    });
+    };
 
-    console.log("MAIL SENT:", info.messageId, info.response);
+    await transporter.sendMail(info);
 
-    res.json({
+    return res.json({
       success: true,
       message: "user registered sucessfully",
       emailQueued: true,
@@ -79,10 +79,10 @@ export async function register(req, res) {
 
 // login
 export async function login(req, res) {
-  const { email, password } = req.body;
+  const { email, password } = req.body || {};
 
   if (!email || !password) {
-    return res.json({
+    return res.status(400).jso({
       success: false,
       message: "Email and Password are required",
     });
@@ -158,6 +158,13 @@ export async function sendVerifyOTP(req, res) {
     const { userId } = req.body;
     const user = await userModel.findById(userId);
 
+    if (!user) {
+      return res.json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
     if (user.isAccountVerified) {
       return res.json({
         success: false,
@@ -181,7 +188,7 @@ export async function sendVerifyOTP(req, res) {
 
     await transporter.sendMail(mailOption);
 
-    res.json({
+    return res.json({
       success: true,
       message: "Verification OTP sent on email",
     });

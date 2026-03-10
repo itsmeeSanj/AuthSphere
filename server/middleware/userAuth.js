@@ -4,8 +4,8 @@
 */
 import jwt from "jsonwebtoken";
 
-export async function userAuth(req, res, next) {
-  const { token } = req.cookies?.token; //optional chaining
+export default async function userAuth(req, res, next) {
+  const token = req.cookies?.token; //optional chaining
 
   if (!token) {
     return res.status(401).json({ success: false, message: "Not authorized" });
@@ -20,7 +20,8 @@ export async function userAuth(req, res, next) {
         .json({ success: false, message: "Not authorized" });
     }
 
-    req.userId = decoded.id;
+    // req.userId = decoded.id;
+    req.body.userId = decoded.id;
     return next();
   } catch (err) {
     return res

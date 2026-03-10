@@ -7,7 +7,8 @@ import {
   sendVerifyOTP,
   verifyEmail,
 } from "../controllers/authController.js";
-import { userAuth } from "../middleware/userAuth.js";
+
+import userAuth from "../middleware/userAuth.js";
 
 const authRouter = express.Router();
 
