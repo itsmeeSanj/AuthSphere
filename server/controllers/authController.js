@@ -252,3 +252,17 @@ export async function verifyEmail(req, res) {
     });
   }
 }
+
+export async function isAuthenticated(req, res) {
+  try {
+    return res.json({
+      success: true,
+      message: "Authenticated",
+    });
+  } catch (error) {
+    return res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
