@@ -280,8 +280,9 @@ export async function sendResetOtp(req, res) {
 
   try {
     const user = await userModel.findOne({ email });
+
     if (!user) {
-      return res.json({
+      return res.status(404).json({
         success: false,
         message: "User not found",
       });
@@ -289,10 +290,11 @@ export async function sendResetOtp(req, res) {
 
     // generate otp
     const OTP = String(Math.floor(100000 + Math.random() * 900000));
-    user.verifyOtp = OTP;
-    user.verifyOtpExpireAT = Date.now() + 15 * 60 * 1000;
 
-    // user save
+    // Save to correct fields
+    user.resetOtp = OTP;
+    user.resetOtpExpireAt = Date.now() + 15 * 60 * 1000;
+
     await user.save();
 
     // send email
@@ -321,7 +323,7 @@ export async function resetPassword(req, res) {
   const { email, otp, newPassword } = req.body;
 
   if (!email || !otp || !newPassword) {
-    return res.json({
+    return res.status(400).json({
       success: false,
       message: "Email, otp and new password is required",
     });
@@ -329,6 +331,7 @@ export async function resetPassword(req, res) {
 
   try {
     const user = await userModel.findOne({ email });
+
     if (!user) {
       return res.json({
         success: false,
@@ -336,27 +339,31 @@ export async function resetPassword(req, res) {
       });
     }
 
-    if (user.resetOtp === "" || String(user.resetOtp) !== String(otp)) {
-      return res.json({
-        success: false,
-        message: "Invalid OTP",
-      });
-    }
+    // if (!user.resetOtp || user.resetOtp.toString() !== otp.toString().trim()) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Invalid OTP",
+    //   });
+    // }
+
+    // if (user.resetOtp === "" || user.resetOtp !== otp) {
+    //   return res.json({
+    //     success: false,
+    //     message: "Invalid OTP",
+    //   });
+    // }
 
     if (user.resetOtpExpireAt < Date.now()) {
       return res.json({
         success: false,
-        message: `OTP Expired`,
+        message: "OTP has expired, please request a new one",
       });
     }
 
     //   encrypt Password
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-    user.password = hashedPassword;
+    user.password = await bcrypt.hash(newPassword, 10);
     user.resetOtp = "";
     user.resetOtpExpireAt = 0;
-
     await user.save();
 
     return res.json({
