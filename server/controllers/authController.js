@@ -339,19 +339,12 @@ export async function resetPassword(req, res) {
       });
     }
 
-    // if (!user.resetOtp || user.resetOtp.toString() !== otp.toString().trim()) {
-    //   return res.status(400).json({
-    //     success: false,
-    //     message: "Invalid OTP",
-    //   });
-    // }
-
-    // if (user.resetOtp === "" || user.resetOtp !== otp) {
-    //   return res.json({
-    //     success: false,
-    //     message: "Invalid OTP",
-    //   });
-    // }
+    if (user.resetOtp === "" || user.resetOtp !== otp) {
+      return res.json({
+        success: false,
+        message: "Invalid OTP",
+      });
+    }
 
     if (user.resetOtpExpireAt < Date.now()) {
       return res.json({
