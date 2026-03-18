@@ -1,7 +1,11 @@
-import React from "react";
+import { Button } from "antd";
 
 function NotFoundPage() {
-  return <div>NotFoundPage</div>;
+  return (
+    <div>
+      <Button type='primary' />
+    </div>
+  );
 }
 
 export default NotFoundPage;

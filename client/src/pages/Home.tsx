@@ -1,5 +1,14 @@
+import { Button } from "antd";
+
 function Home() {
-  return <div>Home Page</div>;
+  return (
+    <div>
+      {/* <Button type='primary'> */}
+      {/*  */}
+      sdfsf
+      {/* </Button> */}
+    </div>
+  );
 }
 
 export default Home;
