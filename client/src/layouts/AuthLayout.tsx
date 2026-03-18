@@ -1,11 +1,9 @@
 import { Outlet } from "react-router";
 
-function RootLayout() {
+export default function AuthLayout() {
   return (
-    <div>
+    <div className=''>
       <Outlet />
     </div>
   );
 }
-
-export default RootLayout;
