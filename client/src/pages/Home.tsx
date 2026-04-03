@@ -1,12 +1,9 @@
-import { Button } from "antd";
+import Navbar from "../components/Navbar";
 
 function Home() {
   return (
     <div>
-      {/* <Button type='primary'> */}
-      {/*  */}
-      sdfsf
-      {/* </Button> */}
+      <Navbar />
     </div>
   );
 }
