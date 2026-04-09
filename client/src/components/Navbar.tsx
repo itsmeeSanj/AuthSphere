@@ -1,16 +1,9 @@
-import { Col, ConfigProvider, Flex, Menu, Row, Space, Typography } from "antd";
+import { ConfigProvider, Menu, Space, Typography } from "antd";
+import type { CSSProperties } from "react";
 
 const { Title, Paragraph } = Typography;
 
-const styles = {
-  navigationPopup: {
-    padding: 16,
-    minWidth: 480,
-    background: "#fff",
-    borderRadius: 16,
-    boxShadow:
-      "0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05)",
-  },
+const styles: Record<string, CSSProperties> = {
   menuItem: {
     borderRadius: 8,
     transition: "all 0.3s",
@@ -19,6 +12,7 @@ const styles = {
   },
   menuItemSpace: {
     width: "100%",
+    height: "100%",
   },
   leadingHeader: {
     margin: 0,
@@ -35,18 +29,10 @@ type MenuItemProps = {
   description: string;
 };
 
-const MenuItem = ({ title, description }: MenuItemProps) => {
+const CustomMenuItem = ({ title, description }: MenuItemProps) => {
   return (
-    <div
-      style={styles.menuItem}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.background = "rgba(0, 0, 0, 0.02)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.background = "transparent";
-      }}
-    >
-      <Space vertical size={4} style={styles.menuItemSpace}>
+    <div style={styles.menuItem}>
+      <Space orientation='vertical' size={4} style={styles.menuItemSpace}>
         <Title level={5} style={styles.marginLess}>
           {title}
         </Title>
@@ -70,7 +56,7 @@ const menuItems = [
       {
         key: "getting-started",
         label: (
-          <MenuItem
+          <CustomMenuItem
             title='Getting Started'
             description='Quick start guide and learn the basics.'
           />
@@ -85,7 +71,10 @@ const menuItems = [
       {
         key: "blog",
         label: (
-          <MenuItem title='Blog' description='Latest updates and articles.' />
+          <CustomMenuItem
+            title='Blog'
+            description='Latest updates and articles.'
+          />
         ),
       },
     ],
@@ -93,34 +82,10 @@ const menuItems = [
 ];
 
 const Navbar = () => {
-  const popupRender = (_: React.ReactNode, item: any) => {
-    return (
-      <Flex style={styles.navigationPopup} vertical gap='middle'>
-        <Typography.Title level={3} style={styles.leadingHeader}>
-          {item?.title || item?.label}
-        </Typography.Title>
-      </Flex>
-    );
-  };
-
   return (
-    <ConfigProvider
-      theme={{
-        components: {
-          Menu: {
-            popupBg: "#fff",
-            horizontalItemSelectedColor: "#1677ff",
-            horizontalItemHoverColor: "#1677ff",
-          },
-          Typography: {
-            titleMarginBottom: 0,
-            titleMarginTop: 0,
-          },
-        },
-      }}
-    >
-      <Menu mode='horizontal' items={menuItems} popupRender={popupRender} />
-    </ConfigProvider>
+    <>
+      <Menu mode='horizontal' items={menuItems} />
+    </>
   );
 };
 

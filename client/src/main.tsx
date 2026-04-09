@@ -1,5 +1,5 @@
 import React from "react";
-import { ConfigProvider } from "antd";
+// import { ConfigProvider } from "antd";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router";
 
