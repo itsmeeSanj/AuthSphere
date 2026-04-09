@@ -1,5 +1,6 @@
 import { Button } from "antd";
 import { FaHome } from "react-icons/fa";
+import { IoLogInOutline } from "react-icons/io5";
 
 const Navbar = () => {
   return (
@@ -10,11 +11,10 @@ const Navbar = () => {
       <div>
         <Button
           type='primary'
-          size='small'
-          icon={<FaHome />}
+          icon={<IoLogInOutline size={16} />}
           iconPlacement='end'
         >
-          Button
+          Login
         </Button>
       </div>
     </div>
