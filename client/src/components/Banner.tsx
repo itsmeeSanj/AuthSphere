@@ -1,6 +1,6 @@
 import { Button } from "antd";
 
-function Header() {
+export default function Banner() {
   return (
     <div className='pt-32 w-1/2 mx-auto'>
       <h1 className='text-4xl'>Hey, Developer Icon</h1>
@@ -10,9 +10,9 @@ function Header() {
         in on time!
       </p>
 
-      <Button type='primary'>Get Started</Button>
+      <Button shape='round' variant='outlined' size='middle'>
+        Get Started
+      </Button>
     </div>
   );
 }
-
-export default Header;

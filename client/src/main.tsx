@@ -3,9 +3,10 @@ import { ConfigProvider } from "antd";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router";
 
+// router
 import router from "./router";
 
-// import "antd/dist/reset.css";
+// css
 import "./App.css";
 import "./index.css";
 

@@ -1,11 +1,12 @@
+import Banner from "../components/Banner";
 import Navbar from "../components/Navbar";
-import Header from "../components/Header";
 
 function Home() {
+  // min-h-[28rem]
   return (
-    <div className='min-h-[28rem] bg-gray-900 text-white'>
+    <div className='min-h-96 bg-gray-900 text-white'>
       <Navbar />
-      <Header />
+      <Banner />
     </div>
   );
 }
