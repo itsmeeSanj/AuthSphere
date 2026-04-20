@@ -3,9 +3,16 @@ import { createBrowserRouter } from "react-router";
 import RootLayout from "../layouts/RootLayout";
 import AuthLayout from "../layouts/AuthLayout";
 
-import Home from "../pages/Home";
-import loginPage from "../pages/Login";
-import NotFoundPage from "../pages/404";
+// public
+import Home from "../features/public/pages/Home";
+
+// auth
+import loginPage from "../features/auth/pages/Login";
+import registerPage from "../features/auth/pages/Register";
+import forgetPasswordPage from "../features/auth/pages/ForgotPassword";
+
+// other
+import NotFoundPage from "../features/public/pages/404";
 
 const router = createBrowserRouter([
   {
@@ -26,14 +33,14 @@ const router = createBrowserRouter([
             path: "login",
             Component: loginPage,
           },
-          // {
-          //   path: "register",
-          //   Component: registerPage,
-          // },
-          // {
-          //   path: "forget-password",
-          //   Component: forgetPasswordPage,
-          // },
+          {
+            path: "register",
+            Component: registerPage,
+          },
+          {
+            path: "forget-password",
+            Component: forgetPasswordPage,
+          },
           // {
           //   path: "reset-password",
           //   Component: resetPasswordPage,

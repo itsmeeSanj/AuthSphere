@@ -20,6 +20,11 @@ createRoot(root!).render(
           colorPrimary: "#6367FF",
           // colorBgContainer:
         },
+        components: {
+          Form: {
+            itemMarginBottom: 12,
+          },
+        },
       }}
     >
       <RouterProvider router={router} />
