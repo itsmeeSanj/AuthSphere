@@ -15,7 +15,6 @@ import NotFoundPage from "../features/public/pages/404";
 // auth
 import loginPage from "../features/auth/pages/Login";
 import registerPage from "../features/auth/pages/Register";
-import forgetPasswordPage from "../features/auth/pages/ForgotPassword";
 import resetPasswordPage from "../features/auth/pages/ResetPassword";
 
 // admin pages
@@ -57,10 +56,7 @@ const router = createBrowserRouter([
             path: "register",
             Component: registerPage,
           },
-          {
-            path: "forget-password",
-            Component: forgetPasswordPage,
-          },
+
           {
             path: "reset-password",
             Component: resetPasswordPage,
