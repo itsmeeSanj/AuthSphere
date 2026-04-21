@@ -83,7 +83,7 @@ function Login() {
 
         <div className='flex justify-end mb-4'>
           <Link
-            to='/forgot-password'
+            to='/forget-password'
             className='text-sm text-blue-600 hover:underline'
           >
             Forgot password?

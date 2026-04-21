@@ -11,7 +11,7 @@ export default function AuthLayout() {
           type='text'
           size='large'
           onClick={() => navigate("/")}
-          className='hover:!bg-transparent focus:!bg-transparent active:!bg-transparent shadow-none'
+          className='hover:bg-transparent! focus:bg-transparent! active:bg-transparent! shadow-none'
           icon={<FaHome size={34} style={{ color: "#6367FF" }} />}
         />
       </div>
