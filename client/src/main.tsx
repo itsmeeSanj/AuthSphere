@@ -4,7 +4,6 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router";
 
 // router
-import { AuthProvider } from "./features/auth/context/AuthContext";
 import router from "./router";
 
 // css
@@ -28,9 +27,7 @@ createRoot(root!).render(
         },
       }}
     >
-      <AuthProvider>
-        <RouterProvider router={router} />
-      </AuthProvider>
+      <RouterProvider router={router} />
     </ConfigProvider>
   </React.StrictMode>,
 );

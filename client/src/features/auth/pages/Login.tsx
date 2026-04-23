@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
+
+import { useAuth } from "../hooks/useAuth";
 
 import { GoMail } from "react-icons/go";
 import { IoIosLock } from "react-icons/io";
@@ -12,6 +14,8 @@ interface LoginFormValues {
 }
 
 function Login() {
+  const { login, backendUrl } = useAuth();
+
   const [loading, setLoading] = React.useState(false);
   const [form] = Form.useForm<LoginFormValues>();
 
@@ -21,19 +25,24 @@ function Login() {
 
       console.log("Login values:", values);
 
-      // const res = await fetch("/api/login", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(values),
-      // });
-      //
-      // const data = await res.json();
-      //
-      // if (!res.ok) {
-      //   throw new Error(data.message || "Login failed");
-      // }
+      const res = await fetch(`${backendUrl}/api/auth/login`, {
+        // ✅ uses context URL
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message || "Login failed");
+
+      login(data.user); // ✅ stores user globally in context
+
+      message.success("Welcome back!");
 
       form.resetFields();
+
+      //  navigate("/dashboard");
     } catch (error) {
       console.error("Login error:", error);
     } finally {
