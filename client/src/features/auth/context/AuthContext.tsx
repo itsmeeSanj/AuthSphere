@@ -1,20 +1,19 @@
 import { createContext } from "react";
 
-// 1. Define type (optional but good for TS)
-interface User {
+export interface User {
+  id?: string;
   name: string;
   email: string;
+  role?: string;
 }
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
+  token: string | null;
   isAuthenticated: boolean;
-  login: (userData: User) => void;
+  login: (userData: User, token: string) => void;
   logout: () => void;
   backendUrl: string;
 }
 
-// 2. Create context
-export const AuthContext = createContext<AuthContextType | undefined>(
-  undefined,
-);
+export const AuthContext = createContext<AuthContextType | null>(null);
