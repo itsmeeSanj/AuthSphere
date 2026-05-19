@@ -2,8 +2,6 @@ import { Button } from "antd";
 import { FaHome } from "react-icons/fa";
 import { Outlet, useNavigate } from "react-router";
 
-import { AuthProvider } from "../features/auth/context/AuthProvider";
-
 export default function AuthLayout() {
   const navigate = useNavigate();
   return (
@@ -19,12 +17,8 @@ export default function AuthLayout() {
       </div>
 
       <div className='bg-white p-6 rounded-2xl shadow-lg w-full max-w-xs md:max-w-md '>
-        <AuthProvider>
-          <Outlet />
-        </AuthProvider>
+        <Outlet />
       </div>
-
-      {/*  */}
     </div>
   );
 }
