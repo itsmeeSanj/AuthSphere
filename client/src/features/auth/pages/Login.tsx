@@ -1,11 +1,12 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Button, Form, Input, message } from "antd";
 
 import { useAuth } from "../hooks/useAuth";
 
 import { GoMail } from "react-icons/go";
 import { IoIosLock } from "react-icons/io";
+
 import AuthHeader from "../components/AuthHeader";
 
 interface LoginFormValues {
@@ -15,7 +16,7 @@ interface LoginFormValues {
 
 function Login() {
   const { login, backendUrl } = useAuth();
-
+  const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
   const [form] = Form.useForm<LoginFormValues>();
 
@@ -23,28 +24,24 @@ function Login() {
     try {
       setLoading(true);
 
-      console.log("Login values:", values);
-
       const res = await fetch(`${backendUrl}/api/auth/login`, {
-        // ✅ uses context URL
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include", // ← cookies
         body: JSON.stringify(values),
       });
 
       const data = await res.json();
-
       if (!res.ok) throw new Error(data.message || "Login failed");
 
-      login(data.user); // ✅ stores user globally in context
-
+      login(data.user, data.token); // ← pass token too
       message.success("Welcome back!");
-
       form.resetFields();
 
-      //  navigate("/dashboard");
+      navigate("/admin/dashboard"); // ← actually navigate
     } catch (error) {
-      console.error("Login error:", error);
+      const err = error as Error;
+      message.error(err.message || "Login failed. Please try again."); // ← show error
     } finally {
       setLoading(false);
     }
