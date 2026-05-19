@@ -1,10 +1,13 @@
 import React from "react";
-import { Button, Form, Input } from "antd";
+import { Link, useNavigate } from "react-router";
+import { Button, Form, Input, message } from "antd";
+
 import { FaUser } from "react-icons/fa";
 import { GoMail } from "react-icons/go";
 import { IoIosLock } from "react-icons/io";
-import { Link } from "react-router";
+
 import AuthHeader from "../components/AuthHeader";
+import { useAuth } from "../hooks/useAuth";
 
 interface RegisterFormValues {
   name: string;
@@ -14,29 +17,34 @@ interface RegisterFormValues {
 }
 
 function Register() {
+  const { backendUrl } = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
   const [form] = Form.useForm<RegisterFormValues>();
 
   const handleSubmit = async (values: RegisterFormValues) => {
     try {
       setLoading(true);
-      console.log("Register values:", values);
 
-      // const res = await fetch("/api/auth/register", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(values),
-      // });
+      // strip confirm — backend doesn't need it
+      const { confirm: _, ...payload } = values;
 
-      // const data = await res.json();
+      const res = await fetch(`${backendUrl}/api/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(payload),
+      });
 
-      // if (!res.ok) {
-      //   throw new Error(data.message || "Registration failed");
-      // }
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Registration failed");
 
+      message.success("Account created! Please sign in.");
       form.resetFields();
+      navigate("/login");
     } catch (error) {
-      console.error("Register error:", error);
+      const err = error as Error;
+      message.error(err.message || "Registration failed. Please try again.");
     } finally {
       setLoading(false);
     }
