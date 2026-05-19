@@ -1,38 +1,18 @@
-import { Navigate, Outlet, useLocation } from "react-router";
+import { Navigate, Outlet } from "react-router";
+import { useAuth } from "../features/auth/hooks/useAuth";
 
-type UserRole = "admin" | "user";
-
-interface AuthUser {
-  id: string;
-  name: string;
-  email: string;
-  role: UserRole;
+interface Props {
+  allowedRoles?: string[];
 }
 
-interface ProtectedRouteProps {
-  isAuthenticated: boolean;
-  user: AuthUser | null;
-  allowedRoles?: UserRole[];
-  redirectTo?: string;
-}
+export default function ProtectedRoute({ allowedRoles }: Props) {
+  const { isAuthenticated, user } = useAuth();
 
-function ProtectedRoute({
-  isAuthenticated,
-  user,
-  allowedRoles,
-  redirectTo = "/login",
-}: ProtectedRouteProps) {
-  const location = useLocation();
+  if (!isAuthenticated) return <Navigate to='/login' replace />;
 
-  if (!isAuthenticated) {
-    return <Navigate to={redirectTo} replace state={{ from: location }} />;
-  }
-
-  if (allowedRoles && (!user || !allowedRoles.includes(user.role))) {
+  if (allowedRoles && user?.role && !allowedRoles.includes(user.role)) {
     return <Navigate to='/unauthorized' replace />;
   }
 
   return <Outlet />;
 }
-
-export default ProtectedRoute;

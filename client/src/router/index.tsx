@@ -18,19 +18,9 @@ import registerPage from "../features/auth/pages/Register";
 import resetPasswordPage from "../features/auth/pages/ResetPassword";
 
 // admin pages
-// import AdminDashboard from "../features/admin/pages/Dashboard";
+import AdminDashboard from "../features/admin/pages/Dashboard";
 // import Users from "../features/admin/pages/Users";
 // import Settings from "../features/admin/pages/Settings";
-
-const authState = {
-  isAuthenticated: true,
-  user: {
-    id: "1",
-    name: "Sanjay",
-    email: "test@example.com",
-    role: "admin" as const,
-  },
-};
 
 const router = createBrowserRouter([
   {
@@ -43,8 +33,6 @@ const router = createBrowserRouter([
         Component: Home,
       },
       { path: "unauthorized", Component: Unauthorized },
-
-      // auth routes
       {
         Component: AuthLayout,
         children: [
@@ -61,30 +49,20 @@ const router = createBrowserRouter([
             path: "reset-password",
             Component: resetPasswordPage,
           },
-          // {
-          //   path: "verify-otp",
-          //   Component: otpVerifyPage,
-          // },
         ],
       },
 
       {
-        element: (
-          <ProtectedRoute
-            isAuthenticated={authState.isAuthenticated}
-            user={authState.user}
-            allowedRoles={["admin"]}
-          />
-        ),
+        element: <ProtectedRoute allowedRoles={["admin"]} />,
         children: [
           {
             path: "admin",
             // Component: AdminLayout,
-            // children: [
-            //   { path: "dashboard", Component: AdminDashboard },
-            //   { path: "users", Component: Users },
-            //   { path: "settings", Component: Settings },
-            // ],
+            children: [
+              { path: "dashboard", Component: AdminDashboard },
+              // { path: "users", Component: Users },
+              // { path: "settings", Component: Settings },
+            ],
           },
         ],
       },
