@@ -12,10 +12,19 @@ const port = process.env.PORT || 4000;
 
 connectDB();
 
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+); //send cookies in
+// to res
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookiePraser());
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true })); //send cookies into res
 
 // API ENDPOINTS
 app.get("/", function (req, res) {
