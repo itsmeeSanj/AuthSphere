@@ -121,6 +121,14 @@ export async function login(req, res) {
     return res.json({
       success: true,
       message: "User logged In",
+
+      user: {
+        // ← ADD THIS
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     });
   } catch (error) {
     return res.json({
@@ -149,7 +157,6 @@ export async function logout(req, res) {
       message: error.message,
     });
   }
-  y;
 }
 
 // sendverifyotp
@@ -250,6 +257,32 @@ export async function verifyEmail(req, res) {
       success: false,
       message: error.message,
     });
+  }
+}
+
+export async function verifyResetOtp(req, res) {
+  const { email, otp } = req.body;
+
+  if (!email || !otp) {
+    return res.json({ success: false, message: "Email and OTP are required" });
+  }
+
+  try {
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+    if (user.resetOtp === "" || user.resetOtp !== otp) {
+      return res.json({ success: false, message: "Invalid OTP" });
+    }
+    if (user.resetOtpExpireAt < Date.now()) {
+      return res.json({ success: false, message: "OTP has expired" });
+    }
+
+    return res.json({ success: true, message: "OTP verified" });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
   }
 }
 
