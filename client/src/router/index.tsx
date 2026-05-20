@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router";
 
 import RootLayout from "../layouts/RootLayout";
 import AuthLayout from "../layouts/AuthLayout";
-// import AdminLayout from "../layouts/AdminLayout";
+import AdminLayout from "../layouts/AdminLayout";
 // import UserLayout from "../layouts/UserLayout";
 
 import ProtectedRoute from "./ProtectedRoute";
@@ -19,7 +19,6 @@ import resetPasswordPage from "../features/auth/pages/ResetPassword";
 
 // admin pages
 import AdminDashboard from "../features/admin/pages/Dashboard";
-// import Users from "../features/admin/pages/Users";
 // import Settings from "../features/admin/pages/Settings";
 
 const router = createBrowserRouter([
@@ -57,7 +56,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: "admin",
-            // Component: AdminLayout,
+            Component: AdminLayout,
             children: [
               { path: "dashboard", Component: AdminDashboard },
               // { path: "users", Component: Users },

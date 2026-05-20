@@ -15,33 +15,36 @@ interface LoginFormValues {
 }
 
 function Login() {
-  const { login, backendUrl } = useAuth();
-  const navigate = useNavigate();
+  const { login, backendUrl, isAuthenticated } = useAuth();
   const [loading, setLoading] = React.useState(false);
+  const navigate = useNavigate();
   const [form] = Form.useForm<LoginFormValues>();
+
+  // redirect if already logged in
+  React.useEffect(() => {
+    if (isAuthenticated) navigate("/admin/dashboard", { replace: true });
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (values: LoginFormValues) => {
     try {
       setLoading(true);
-
       const res = await fetch(`${backendUrl}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include", // ← cookies
+        credentials: "include",
         body: JSON.stringify(values),
       });
-
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Login failed");
-
-      login(data.user, data.token); // ← pass token too
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Login failed");
+      }
+      login(data.user);
       message.success("Welcome back!");
       form.resetFields();
-
-      navigate("/admin/dashboard"); // ← actually navigate
+      navigate("/admin/dashboard");
     } catch (error) {
       const err = error as Error;
-      message.error(err.message || "Login failed. Please try again."); // ← show error
+      message.error(err.message || "Login failed. Please try again.");
     } finally {
       setLoading(false);
     }

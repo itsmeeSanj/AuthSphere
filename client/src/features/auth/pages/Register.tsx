@@ -17,28 +17,30 @@ interface RegisterFormValues {
 }
 
 function Register() {
-  const { backendUrl } = useAuth();
+  const { backendUrl, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
   const [form] = Form.useForm<RegisterFormValues>();
 
+  // redirect if already logged in
+  React.useEffect(() => {
+    if (isAuthenticated) navigate("/admin/dashboard", { replace: true });
+  }, [isAuthenticated, navigate]);
+
   const handleSubmit = async (values: RegisterFormValues) => {
     try {
       setLoading(true);
-
-      // strip confirm — backend doesn't need it
       const { confirm: _, ...payload } = values;
-
       const res = await fetch(`${backendUrl}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify(payload),
       });
-
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Registration failed");
-
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Registration failed");
+      }
       message.success("Account created! Please sign in.");
       form.resetFields();
       navigate("/login");
