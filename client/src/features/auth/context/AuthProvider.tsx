@@ -1,37 +1,61 @@
 import React, { type ReactNode } from "react";
+import { useNavigate } from "react-router";
+
 import { AuthContext, type AuthContextType, type User } from "./AuthContext";
+import { message } from "antd";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const navigate = useNavigate();
+
   const [user, setUser] = React.useState<User | null>(() => {
-    // rehydrate on refresh
-    const stored = localStorage.getItem("user");
-    return stored ? JSON.parse(stored) : null;
+    try {
+      const stored = localStorage.getItem("user");
+      // guard against literal "undefined" string
+      if (!stored || stored === "undefined") return null;
+      return JSON.parse(stored);
+    } catch {
+      localStorage.removeItem("user"); // clear corrupted data
+      return null;
+    }
   });
 
-  const [token, setToken] = React.useState<string | null>(() =>
-    localStorage.getItem("token"),
-  );
-
-  const isAuthenticated = !!user && !!token;
+  const isAuthenticated = !!user;
   const backendUrl = import.meta.env.VITE_BACKEND_URL as string;
 
-  const login = (userData: User, authToken: string) => {
+  // const [token, setToken] = React.useState<string | null>(() => {
+  //   const stored = localStorage.getItem("token");
+  //   if (!stored || stored === "undefined") return null;
+  //   return stored;
+  // });
+
+  const login = (userData: User) => {
+    // don't store if data is bad
+    if (!userData) {
+      console.error("Login called with invalid user data");
+      return;
+    }
     setUser(userData);
-    setToken(authToken);
     localStorage.setItem("user", JSON.stringify(userData));
-    localStorage.setItem("token", authToken);
   };
 
-  const logout = () => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
+  const logout = async () => {
+    try {
+      await fetch(`${backendUrl}/api/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      setUser(null);
+      localStorage.removeItem("user");
+      message.success("Logged out successfully");
+      navigate("/login");
+    }
   };
 
   const value: AuthContextType = {
     user,
-    token,
     isAuthenticated,
     login,
     logout,
