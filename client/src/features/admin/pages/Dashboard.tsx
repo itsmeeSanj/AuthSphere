@@ -1,52 +1,84 @@
+import React from "react";
+import { Breadcrumb, Col, Layout, Row, theme, Typography } from "antd";
+
 import {
   TeamOutlined,
   UserOutlined,
   CheckCircleOutlined,
   RiseOutlined,
 } from "@ant-design/icons";
-import { Breadcrumb, Col, Layout, Row, theme, Typography } from "antd";
+
 import { useAuth } from "../../auth/hooks/useAuth";
 import StatsCard from "../components/StatsCard";
-// import StatsCard from "../components/StatsCard";
 
 const { Content, Footer } = Layout;
 const { Title, Text } = Typography;
 
-// ── Stats data — replace values with real API data later ──────────────
-const stats = [
-  {
-    title: "Total Users",
-    value: 1240,
-    icon: <TeamOutlined />,
-    color: "#6367FF",
-  },
-  {
-    title: "Active Sessions",
-    value: 38,
-    icon: <UserOutlined />,
-    color: "#52c41a",
-  },
-  {
-    title: "Verified Accounts",
-    value: 980,
-    icon: <CheckCircleOutlined />,
-    color: "#1677ff",
-  },
-  {
-    title: "Growth",
-    value: 12,
-    icon: <RiseOutlined />,
-    color: "#fa8c16",
-    suffix: "%",
-  },
-];
-
 export default function Dashboard() {
-  const { user } = useAuth();
+  const { user, backendUrl } = useAuth();
+
+  const [data, setData] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState("");
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   const currentYear = new Date().getFullYear();
+
+  //
+  React.useEffect(() => {
+    const loadStats = async () => {
+      try {
+        setLoading(true);
+
+        const res = await fetch(`${backendUrl}/api/user/stats`, {
+          credentials: "include", // sends cookie automatically
+        });
+
+        const data = await res.json();
+        setData(data);
+
+        console.log("data", data);
+      } catch (err) {
+        const e = err as Error;
+        setError(e.message || "Failed to load stats");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadStats();
+  }, [backendUrl]);
+
+  // ── Stats data — replace values with real API data later ──────────────
+  const stats = [
+    {
+      title: "Total Users",
+      // value: data?.totalUsers ?? 0,
+      icon: <TeamOutlined />,
+      color: "#6367FF",
+    },
+    {
+      title: "Active Sessions",
+      value: 38,
+      icon: <UserOutlined />,
+      color: "#52c41a",
+    },
+    {
+      title: "Verified Accounts",
+      value: 980,
+      icon: <CheckCircleOutlined />,
+      color: "#1677ff",
+    },
+    {
+      title: "Growth",
+      value: 12,
+      icon: <RiseOutlined />,
+      color: "#fa8c16",
+      suffix: "%",
+    },
+  ];
 
   return (
     <>

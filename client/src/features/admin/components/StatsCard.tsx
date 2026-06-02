@@ -18,10 +18,7 @@ export default function StatsCard({
   suffix,
 }: Props) {
   return (
-    <Card
-      bordered={false}
-      style={{ borderRadius: 12, boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}
-    >
+    <Card style={{ borderRadius: 12, boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
       <div
         style={{
           display: "flex",
@@ -30,6 +27,7 @@ export default function StatsCard({
         }}
       >
         <Statistic title={title} value={value} suffix={suffix} />
+
         <div
           style={{
             width: 48,
