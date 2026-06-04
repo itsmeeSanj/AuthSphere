@@ -36,6 +36,7 @@ export default function DashboardHeader({ collapsed, onToggle }: Props) {
       icon: <UserOutlined />,
       label: "Profile",
     },
+
     {
       type: "divider",
     },
