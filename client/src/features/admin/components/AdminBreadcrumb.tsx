@@ -17,7 +17,7 @@ export default function AdminBreadcrumb({ title, breadcrumbs }: Props) {
   return (
     <div style={{ padding: "0 8px 16px" }}>
       <Breadcrumb
-        style={{ marginBottom: 8 }}
+        // style={{ marginBottom: 8 }}
         items={breadcrumbs.map((item) => ({
           title: item.path ? (
             <Link to={item.path}>{item.title}</Link>
