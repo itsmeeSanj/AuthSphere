@@ -25,9 +25,19 @@ const menuItems = [
     label: "Profile",
   },
   {
-    key: "/admin/settings",
+    key: "sub1",
     icon: <SettingOutlined />,
     label: "Settings",
+    children: [
+      {
+        key: "/admin/profile",
+        label: "Profile",
+      },
+      {
+        key: "/admin/change-password",
+        label: "Change Password",
+      },
+    ],
   },
 ];
 
@@ -43,6 +53,7 @@ function SidebarMenu() {
         selectedKeys={[location.pathname]}
         items={menuItems}
         onClick={({ key }) => navigate(key)}
+        defaultOpenKeys={["sub1"]}
       />
     </>
   );
