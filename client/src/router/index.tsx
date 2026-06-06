@@ -19,7 +19,8 @@ import resetPasswordPage from "../features/auth/pages/ResetPassword";
 
 // admin pages
 import AdminDashboard from "../features/admin/pages/Dashboard";
-import Settings from "../features/admin/pages/Settings";
+import Profile from "../features/admin/pages/Profile";
+import ChangePassword from "../features/admin/pages/changePassword";
 
 const router = createBrowserRouter([
   {
@@ -59,7 +60,8 @@ const router = createBrowserRouter([
             Component: AdminLayout,
             children: [
               { path: "dashboard", Component: AdminDashboard },
-              { path: "settings", Component: Settings },
+              { path: "profile", Component: Profile },
+              { path: "change-password", Component: ChangePassword },
             ],
           },
         ],
