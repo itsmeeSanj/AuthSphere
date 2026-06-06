@@ -15,7 +15,7 @@ interface Props {
 
 export default function AdminBreadcrumb({ title, breadcrumbs }: Props) {
   return (
-    <div style={{ padding: "0 8px 16px" }}>
+    <>
       <Breadcrumb
         // style={{ marginBottom: 8 }}
         items={breadcrumbs.map((item) => ({
@@ -26,9 +26,27 @@ export default function AdminBreadcrumb({ title, breadcrumbs }: Props) {
           ),
         }))}
       />
-      {/* <Title level={4} style={{ margin: "0 0 16px" }}>
+
+      {/*  */}
+
+      <div
+        className='rounded-sm my-4 p-4'
+        style={{
+          background: "linear-gradient(135deg, #6367FF 0%, #33369b 100%)",
+        }}
+      >
+        <h5 className='text-white font-bold capitalize'>{title} </h5>
+        {/* <Title level={3} style={{ color: "#fff", margin: 0 }}>
+          Welcome back, {user?.name}! 👋
+        </Title>
+        <Text style={{ color: "rgba(255,255,255,0.75)" }}>
+          {user?.email} · {user?.role ?? "admin"}
+        </Text> */}
+      </div>
+
+      {/* <Title level={4} style={{ margin: "16px 0 " }}>
         {title}
       </Title> */}
-    </div>
+    </>
   );
 }
