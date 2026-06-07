@@ -83,16 +83,7 @@ export default function Dashboard() {
 
   return (
     <>
-      {/* Breadcrumb */}
-      {/* <Breadcrumb
-        items={[{ title: "Home" }, { title: "Dashboard" }]}
-        style={{ padding: "0 8px 16px" }}
-      /> */}
-
-      {/*  */}
-
       <AdminBreadcrumb
-        title='Dashboard'
         breadcrumbs={[
           { title: "Home", path: "/admin/dashboard" },
           { title: "Dashboard" },
