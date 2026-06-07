@@ -15,7 +15,6 @@ userRouter.get("/data", userAuth, getUserData);
 // userRouter.get("/stats", userAuth, getUserStats);
 userRouter.get("/profile", userAuth, getProfile);
 userRouter.put("/profile", userAuth, updateProfile);
-userRouter.put("/profile", userAuth, updateProfile);
 userRouter.put("/change-password", userAuth, changePassword);
 
 export default userRouter;
