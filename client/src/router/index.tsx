@@ -20,7 +20,7 @@ import resetPasswordPage from "../features/auth/pages/ResetPassword";
 // admin pages
 import AdminDashboard from "../features/admin/pages/Dashboard";
 import Profile from "../features/admin/pages/Profile";
-import ChangePassword from "../features/admin/pages/changePassword";
+import ChangePassword from "../features/admin/pages/ChangePassword";
 
 const router = createBrowserRouter([
   {
