@@ -4,6 +4,7 @@ import { Button, Form, Input, Card, message } from "antd";
 
 import { useAuth } from "../../auth/hooks/useAuth";
 import AdminBreadcrumb from "../components/AdminBreadcrumb";
+import AdminTitle from "../components/AdminTitle";
 
 interface ChangePasswordValues {
   currentPassword: string;
@@ -44,12 +45,13 @@ export default function ChangePassword() {
   return (
     <>
       <AdminBreadcrumb
-        title='Change Passwords'
         breadcrumbs={[
           { title: "Home", path: "/admin/dashboard" },
           { title: "Change Password" },
         ]}
       />
+
+      <AdminTitle title='Change Passwords' />
 
       <div style={{ maxWidth: 480 }}>
         <Card
@@ -114,6 +116,7 @@ export default function ChangePassword() {
                 }),
               ]}
             >
+              npm
               <Input.Password
                 prefix={<IoIosLock />}
                 placeholder='Re-enter new password'
