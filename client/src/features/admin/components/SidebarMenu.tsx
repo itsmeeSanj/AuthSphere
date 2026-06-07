@@ -20,17 +20,13 @@ const menuItems = [
     label: "Users",
   },
   {
-    key: "/admin/profile",
-    icon: <UserOutlined />,
-    label: "Profile",
-  },
-  {
     key: "sub1",
     icon: <SettingOutlined />,
     label: "Settings",
     children: [
       {
         key: "/admin/profile",
+        icon: <UserOutlined />,
         label: "Profile",
       },
       {
