@@ -87,3 +87,45 @@ export async function changePassword(req, res) {
     return res.json({ success: false, message: error.message });
   }
 }
+
+// getAllUsers
+export async function getAllUsers(req, res) {
+  try {
+    const users = await userModel
+      .find()
+      .select(
+        "-password -verifyOtp -resetOtp -verifyOtpExpireAT -resetOtpExpireAt",
+      )
+      .sort({ createdAt: -1 }); // newest first
+    return res.json({
+      success: true,
+      users,
+    });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+}
+
+// deleteUser
+export async function deleteAccount(req, res) {
+  try {
+    // admin deleting another user → use params
+    // user deleting own account → use req.userId
+    const targetId = req.params.userId || req.userId;
+
+    await userModel.findByIdAndDelete(targetId);
+
+    // only clear cookie if deleting own account
+    if (!req.params.userId) {
+      res.clearCookie("token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+      });
+    }
+
+    return res.json({ success: true, message: "User deleted successfully" });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+}
