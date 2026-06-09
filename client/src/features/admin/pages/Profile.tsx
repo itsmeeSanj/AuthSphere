@@ -55,10 +55,7 @@ export default function Profile() {
   return (
     <>
       <AdminBreadcrumb
-        breadcrumbs={[
-          { title: "Home", path: "/admin/dashboard" },
-          { title: "Profile" },
-        ]}
+        breadcrumbs={[{ title: "Home", path: "/admin" }, { title: "Profile" }]}
       />
 
       <AdminTitle title='Profile' />
