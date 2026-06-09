@@ -10,7 +10,7 @@ import { useNavigate, useLocation } from "react-router";
 
 const menuItems = [
   {
-    key: "/admin/dashboard",
+    key: "/admin",
     icon: <AppstoreOutlined />,
     label: "Dashboard",
   },
