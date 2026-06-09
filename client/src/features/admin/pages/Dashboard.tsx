@@ -85,7 +85,7 @@ export default function Dashboard() {
     <>
       <AdminBreadcrumb
         breadcrumbs={[
-          { title: "Home", path: "/admin/dashboard" },
+          { title: "Home", path: "/admin" },
           { title: "Dashboard" },
         ]}
       />
