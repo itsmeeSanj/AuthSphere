@@ -46,7 +46,7 @@ export default function ChangePassword() {
     <>
       <AdminBreadcrumb
         breadcrumbs={[
-          { title: "Home", path: "/admin/dashboard" },
+          { title: "Home", path: "/admin" },
           { title: "Change Password" },
         ]}
       />
