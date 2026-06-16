@@ -22,7 +22,7 @@ function Login() {
 
   // redirect if already logged in
   React.useEffect(() => {
-    if (isAuthenticated) navigate("/admin/dashboard", { replace: true });
+    if (isAuthenticated) navigate("/admin", { replace: true });
   }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (values: LoginFormValues) => {
@@ -41,7 +41,7 @@ function Login() {
       login(data.user);
       message.success("Welcome back!");
       form.resetFields();
-      navigate("/admin/dashboard");
+      navigate("/admin");
     } catch (error) {
       const err = error as Error;
       message.error(err.message || "Login failed. Please try again.");

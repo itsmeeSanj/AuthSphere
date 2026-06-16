@@ -1,46 +1,46 @@
 import React from "react";
-import { Col, Layout, Row, theme, Typography } from "antd";
-
+import { Col, Layout, Row, theme, Typography, Spin, Alert } from "antd";
 import {
   TeamOutlined,
   UserOutlined,
   CheckCircleOutlined,
-  RiseOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
-
 import { useAuth } from "../../auth/hooks/useAuth";
 import StatsCard from "../components/StatsCard";
 import AdminBreadcrumb from "../components/AdminBreadcrumb";
 
-const { Content, Footer } = Layout;
+const { Footer } = Layout;
 const { Title, Text } = Typography;
+
+interface Stats {
+  totalUsers: number;
+  verifiedUsers: number;
+  unverifiedUsers: number;
+}
 
 export default function Dashboard() {
   const { user, backendUrl } = useAuth();
-
-  const [data, setData] = React.useState([]);
+  const [stats, setStats] = React.useState<Stats | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState("");
 
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
   const currentYear = new Date().getFullYear();
 
-  //
   React.useEffect(() => {
     const loadStats = async () => {
       try {
         setLoading(true);
-
         const res = await fetch(`${backendUrl}/api/user/stats`, {
-          credentials: "include", // sends cookie automatically
+          credentials: "include",
         });
-
         const data = await res.json();
-        setData(data);
-
-        console.log("data", data);
+        if (!data.success) throw new Error(data.message);
+        setStats(data.stats); // ← data.stats not data
       } catch (err) {
         const e = err as Error;
         setError(e.message || "Failed to load stats");
@@ -48,36 +48,33 @@ export default function Dashboard() {
         setLoading(false);
       }
     };
-
     loadStats();
   }, [backendUrl]);
 
-  // ── Stats data — replace values with real API data later ──────────────
-  const stats = [
+  const statCards = [
     {
       title: "Total Users",
-      // value: data?.totalUsers ?? 0,
+      value: stats?.totalUsers ?? 0, // ← real data
       icon: <TeamOutlined />,
       color: "#6367FF",
     },
     {
-      title: "Active Sessions",
-      value: 38,
-      icon: <UserOutlined />,
+      title: "Verified Accounts",
+      value: stats?.verifiedUsers ?? 0, // ← real data
+      icon: <CheckCircleOutlined />,
       color: "#52c41a",
     },
     {
-      title: "Verified Accounts",
-      value: 980,
-      icon: <CheckCircleOutlined />,
-      color: "#1677ff",
+      title: "Unverified Accounts",
+      value: stats?.unverifiedUsers ?? 0, // ← real data
+      icon: <CloseCircleOutlined />,
+      color: "#fa8c16",
     },
     {
-      title: "Growth",
-      value: 12,
-      icon: <RiseOutlined />,
-      color: "#fa8c16",
-      suffix: "%",
+      title: "Your Role",
+      value: user?.role ?? "admin",
+      icon: <UserOutlined />,
+      color: "#1677ff",
     },
   ];
 
@@ -107,16 +104,28 @@ export default function Dashboard() {
         </Text>
       </div>
 
-      {/* Stats grid */}
-      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
-        {stats.map((stat) => (
-          <Col xs={24} sm={12} lg={6} key={stat.title}>
-            <StatsCard {...stat} />
-          </Col>
-        ))}
-      </Row>
+      {/* Error */}
+      {error && (
+        <Alert
+          message={error}
+          type='error'
+          showIcon
+          style={{ marginBottom: 24 }}
+        />
+      )}
 
-      {/* Main content area — add your tables/charts here later */}
+      {/* Stats grid */}
+      <Spin spinning={loading}>
+        <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+          {statCards.map((stat) => (
+            <Col xs={24} sm={12} lg={6} key={stat.title}>
+              <StatsCard {...stat} />
+            </Col>
+          ))}
+        </Row>
+      </Spin>
+
+      {/* Main content */}
       <div
         style={{
           padding: 32,
